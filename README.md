@@ -1,6 +1,6 @@
 # test-video-recorder
 
-Headless video recording using FFmpeg and Mocha.
+Headless video recording using [FFmpeg](https://ffmpeg.org/) and Mocha. This package requires that FFmpeg is already installed.
 
 ## Installation
 
