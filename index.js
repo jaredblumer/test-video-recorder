@@ -40,7 +40,7 @@ exports.start = (test) => {
       "-i",
       process.env.DISPLAY, // input file url
       "-loglevel",
-      "debug", // log only errors
+      "error", // log only errors
       "-y", // overwrite output files without asking
       "-pix_fmt",
       "yuv420p", // QuickTime Player support, "Use -pix_fmt yuv420p for compatibility with outdated media players"
