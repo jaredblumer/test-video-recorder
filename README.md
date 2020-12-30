@@ -15,7 +15,14 @@ npm install test-video-recorder
 After installing the package, import the package in your Mocha test.
 
 ```JS
-const test-video-recorder = require('test-video-recorder');
+const video = require('test-video-recorder');
+```
+
+Create the folder to save your video logs and set the path using the [Node path module](https://nodejs.org/api/path.html) and the setPath() function.
+
+```JS
+const path = require("path");
+video.setPath(path.join(__dirname, "/log"));
 ```
 
 Start video recorder before each mocha test:
@@ -24,7 +31,7 @@ Start video recorder before each mocha test:
 describe('Test group', function() {
   beforeEach(function() {
     // runs before each test in this block
-    test-video-recorder.start(this.currentTest);
+    video.start(this.currentTest);
   });
 }
 
@@ -38,7 +45,7 @@ describe('Test group', function() {
 
   afterEach(function() {
     // runs after each test in this block
-    test-video-recorder.stop();
+    video.stop();
   });
 }
 ```
