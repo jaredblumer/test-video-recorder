@@ -2,8 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const logPath = process.env.LOG_DIR || path.join(__dirname, "/log");
-let ffmpeg;
+let ffmpeg, logPath;
 
 // get current test title and clean it, to use it as file name
 function fileName(title) {
@@ -14,11 +13,19 @@ function fileName(title) {
 function filePath(test, screenshotPath, extension) {
   return path.join(
     screenshotPath,
-    `${fileName(test.parent)}-${fileName(test.title)}.${extension}`
+    `${fileName(test.parent.title)}-${fileName(test.title)}.${extension}`
   );
 }
 
-export function start(test) {
+exports.setPath = (path) => {
+  logPath = path;
+};
+
+exports.start = (test) => {
+  if (!logPath) {
+    throw new Error("Video path not set. Set using setPath() function.");
+  }
+
   if (process.env.DISPLAY && process.env.DISPLAY.startsWith(":")) {
     const videoPath = filePath(test, logPath, "mp4");
     const { spawn } = require("child_process");
@@ -30,7 +37,7 @@ export function start(test) {
       "-i",
       process.env.DISPLAY, // input file url
       "-loglevel",
-      "error", // log only errors
+      "debug", // log only errors
       "-y", // overwrite output files without asking
       "-pix_fmt",
       "yuv420p", // QuickTime Player support, "Use -pix_fmt yuv420p for compatibility with outdated media players"
@@ -62,11 +69,11 @@ export function start(test) {
       }
     });
   }
-}
+};
 
-export function stop() {
+exports.stop = () => {
   if (ffmpeg) {
     // stop video recording
     ffmpeg.kill("SIGINT");
   }
-}
+};
