@@ -18,7 +18,7 @@ After installing the package, import the package in your Mocha test.
 const video = require('test-video-recorder');
 ```
 
-Create the folder to save your video logs and set the path using the [Node path module](https://nodejs.org/api/path.html) and the setPath() function.
+Create the folder to save your video logs and set the path using the [Node path module](https://nodejs.org/api/path.html) and the setPath function. The path below will save the videos to a log folder within the current test directory.
 
 ```JS
 const path = require("path");
