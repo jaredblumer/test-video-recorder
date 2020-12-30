@@ -17,11 +17,14 @@ function filePath(test, screenshotPath, extension) {
   );
 }
 
+// set video path
 exports.setPath = (path) => {
   logPath = path;
 };
 
+// start video recording
 exports.start = (test) => {
+  // Throw error if video path not set
   if (!logPath) {
     throw new Error("Video path not set. Set using setPath() function.");
   }
@@ -71,9 +74,9 @@ exports.start = (test) => {
   }
 };
 
+// stop video recording
 exports.stop = () => {
   if (ffmpeg) {
-    // stop video recording
     ffmpeg.kill("SIGINT");
   }
 };
