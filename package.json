@@ -1,7 +1,7 @@
 {
   "name": "test-video-recorder",
   "version": "1.0.0",
-  "description": "",
+  "description": "Headless video recording using FFmpeg and Mocha. This package requires that FFmpeg is already installed.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
