@@ -1,6 +1,6 @@
 {
   "name": "test-video-recorder",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Headless video recording for WebdriverIO and Mocha using FFmpeg.",
   "main": "index.js",
   "scripts": {
