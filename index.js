@@ -4,47 +4,68 @@ const fs = require("fs");
 const path = require("path");
 let ffmpeg, logPath;
 
-// get current test title and clean it, to use it as file name
+// Get current test title and clean it, to use it as file name
 function fileName(title) {
   return encodeURIComponent(title.trim().replace(/\s+/g, "-"));
 }
 
-// build file path
-function filePath(test, screenshotPath, extension) {
-  return path.join(
-    screenshotPath,
-    `${fileName(test.parent.title)}-${fileName(test.title)}.${extension}`
-  );
+// Build file path
+function filePath(test, logPath, extension, testType) {
+
+  // Mocha test type
+  if (testType === 'wdio') {
+    return path.join(
+      logPath,
+      `${fileName(test.parent)}-${fileName(test.title)}.${extension}`
+    );
+  }
+
+  // WDIO test type 
+  else if (testType === 'mocha') {
+    return path.join(
+      logPath,
+      `${fileName(test.parent.title)}-${fileName(test.title)}.${extension}`
+    );
+  }
+  
+  // Else, throw error
+  else {
+    throw new Error("Invalid test type. Use 'wdio' or 'mocha'.")
+  }
 }
 
-// set video path
+// Set video path
 exports.setPath = (path) => {
   logPath = path;
 };
 
-// start video recording
-exports.start = (test) => {
+// Start video recording
+exports.start = (test, testType) => {
   // Throw error if video path not set
   if (!logPath) {
     throw new Error("Video path not set. Set using setPath() function.");
   }
 
+  if (!testType) {
+    throw new Error("Test type required. Use 'wdio' or 'mocha'.");
+  }
+
   if (process.env.DISPLAY && process.env.DISPLAY.startsWith(":")) {
-    const videoPath = filePath(test, logPath, "mp4");
+    const videoPath = filePath(test, logPath, "mp4", testType);
     const { spawn } = require("child_process");
     ffmpeg = spawn("ffmpeg", [
       "-f",
-      "x11grab", //  grab the X11 display
+      "x11grab", //  Grab the X11 display
       "-video_size",
-      "1280x1024", // video size
+      "1280x1024", // Video size
       "-i",
-      process.env.DISPLAY, // input file url
+      process.env.DISPLAY, // Input file url
       "-loglevel",
-      "error", // log only errors
-      "-y", // overwrite output files without asking
+      "error", // Log only errors
+      "-y", // Overwrite output files without asking
       "-pix_fmt",
       "yuv420p", // QuickTime Player support, "Use -pix_fmt yuv420p for compatibility with outdated media players"
-      videoPath, // output file
+      videoPath, // Output file
     ]);
 
     const logBuffer = function (buffer, prefix) {
@@ -74,7 +95,7 @@ exports.start = (test) => {
   }
 };
 
-// stop video recording
+// Stop video recording
 exports.stop = () => {
   if (ffmpeg) {
     ffmpeg.kill("SIGINT");
