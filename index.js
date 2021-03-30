@@ -6,7 +6,7 @@ let ffmpeg, logPath;
 
 // get current test title and clean it, to use it as file name
 function fileName(title) {
-  return encodeURIComponent(title.trim().replace(/["~!@#$%^&*\(\)_+=`{}\[\]\|\\:;'<>,.\/?"\- \t\r\n]+/g, '-'));
+  return encodeURIComponent(title.trim().replace(/\s+/g, "-"));
 }
 
 // build file path
