@@ -1,18 +1,20 @@
 # test-video-recorder
 
-Headless video recording using [FFmpeg](https://ffmpeg.org/) and Mocha. This package requires that FFmpeg is already installed.
+Headless video recording for [WebdriverIO](https://webdriver.io/) and [Mocha](https://mochajs.org/) using [FFmpeg](https://ffmpeg.org/).
 
 ## Installation
 
-Use npm to install test-video-recorder.
+1. Use npm to install test-video-recorder.
 
 ```bash
 npm install test-video-recorder
 ```
 
-## Usage
+2. [FFmpeg](https://ffmpeg.org/) is a dependency for this package. Visit their [website](https://ffmpeg.org/) to download and install the package.
 
-After installing the package, import the package in your Mocha test.
+## Setup
+
+After installing test-video-recorder and FFmpeg, import the package in your mocha test file or Webdriver IO config file.
 
 ```JS
 const video = require('test-video-recorder');
@@ -25,13 +27,33 @@ const path = require("path");
 video.setPath(path.join(__dirname, "/log"));
 ```
 
-Start video recorder before each mocha test:
+## Choose Test Type: WebdriverIO or Mocha
+Follow the instructions below for your desired test type.
+
+## WebdriverIO
+In your wdio config file, start the video recording using the beforeTest hook and stop the recording using the afterTest hook as seen below. The video start function requires the wdio test object from the hook function as well as a test type parameter, which in this case is 'wdio'.
+
+```JS
+exports.config = {
+	// Start video before each test
+	beforeTest: function ( test ) {
+		video.start(test, 'wdio');
+	},
+
+	// Stop video recording after each test
+	afterTest: function ( test ) {
+		video.stop();
+  }
+}
+```
+## Mocha
+You can add video recording to Mocha test files directly using the beforeEach and afterEach hook within your describe block. The video start function requires the mocha currentTest object from the hook function as well as a test type parameter, which in this case is 'mocha'.
 
 ```JS
 describe('Test group', function() {
+  // Start video before each test in this block
   beforeEach(function() {
-    // runs before each test in this block
-    video.start(this.currentTest);
+    video.start(this.currentTest, 'mocha');
   });
 }
 
@@ -41,10 +63,10 @@ Stop the video recording after each test:
 
 ```JS
 describe('Test group', function() {
-    // ...
+  // ...
 
+  // Stop each video after test completes
   afterEach(function() {
-    // runs after each test in this block
     video.stop();
   });
 }
